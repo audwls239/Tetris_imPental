@@ -14,6 +14,8 @@ typedef struct tetris{
     struct tetris_block current;
     int posX;
     int posY;
+    int gameover;
+    int score;
 } tetris;
 
 #endif

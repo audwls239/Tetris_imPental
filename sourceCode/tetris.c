@@ -35,6 +35,8 @@ void setting_Tetris(tetris* t, int width, int height){
 
     t -> width = width;
     t -> height = height;
+    t -> gameover = 0;
+    t -> score = 0;
 
     t -> board = (int**) malloc(sizeof(int*) * t -> height);
 
@@ -54,6 +56,10 @@ void new_Block(tetris* t){
     
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
+
+    if(hittest_block(t) == 1){
+        t -> gameover = 1;
+    }
 }
 
 /* 화면 출력 */
@@ -107,21 +113,21 @@ void rotate_Block(tetris* t){
 }
 
 /* 떨어지는 블럭 아래에 블럭 있을시 게임판에 새기고 새로 생성 */
-void hittest_block(tetris* t){
+int hittest_block(tetris* t){
     int i, j;
+    // 바닥에 닿았을 때
+    if(t -> posY == t -> height - t -> current.height){
+        carveblock(t);
+        return 1;
+    }
 
-    // 맨 밑줄일 경우
-    for(i = 0; i < t -> current.width; i++){
-        if(t -> current.shape[t -> current.height - 1][i] == 1 && t -> posY + t -> current.height == t -> height){
-            carveblock(t);
-            new_Block(t);            
-        }
-        else if(t -> current.shape[t -> current.height - 1][i] == 1 && t -> board[t -> posY + t -> current.height][t -> posX + i] == 0){
-            continue;
-        }
-        else if(t -> current.shape[t -> current.height - 1][i] == 1 && t -> board[t -> posY + t -> current.height][t -> posX + i] == 1){
-            carveblock(t);
-            new_Block(t);
+    // 아래에 블록 있을때
+    for(i = t -> current.height - 1; i > -1; i--){
+        for(j = 0; j < t -> current.width; j++){
+            if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + 1 + i][t -> posX + j] == 1){
+                carveblock(t);
+                return 1;
+            }
         }
     }
 }
@@ -136,6 +142,8 @@ void carveblock(tetris* t){
                 t -> board[t -> posY + i][t -> posX + j] = 1;
         }
     }
+
+    check_line(t);
 }
 
 /* 블럭 내려 온다 블럭 내려온다~ */
@@ -213,7 +221,7 @@ void check_line(tetris* t){
 
         // 한 줄 완성시 삭제
         if(state){
-            line++;
+            t -> score += 100;
             remove_line(t, i);
         }
     }

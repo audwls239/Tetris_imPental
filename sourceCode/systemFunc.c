@@ -14,3 +14,7 @@ void set_ioconfig(){
     tcsetattr(fd, TCSANOW, &custom);
     fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
 }
+
+void tetris_cleanup_io(){
+    tcsetattr(fileno(stdin), TCSANOW, &save);
+}

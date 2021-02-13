@@ -19,7 +19,7 @@ void setting_Tetris(tetris* t, int width, int height);
 
 void rotate_Block(tetris* t);
 
-void hittest_block(tetris* t);
+int hittest_block(tetris* t);
 
 void carveblock(tetris* t);
 

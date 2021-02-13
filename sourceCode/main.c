@@ -42,7 +42,8 @@ int main(void){
     int i = 0;
     int timer = 0;
     int count = 0;
-    while(1){
+
+    while(t.gameover == 0){
         nanosleep(&tm, NULL);
         timer++;
         count++;
@@ -52,9 +53,6 @@ int main(void){
                 if(getchar() == 91){
                     cmd = getchar();
                     switch(cmd){
-                        // case UP:
-                        //     t.posY--;
-                        //     break;
                         case DOWN:
                             block_Gravity(&t);
                             break;
@@ -62,14 +60,15 @@ int main(void){
                             t.posX++;
                             if(move_block(&t, 1))
                                 t.posX--;
+                            count = 1;
                             break;
                         case RIGHT:
                             t.posX--;
                             if(move_block(&t, 0))
                                 t.posX++;
+                            count = 1;
                             break;
                     }
-                    count = 1;
                 }
             }
             else if(cmd == 32)
@@ -84,19 +83,18 @@ int main(void){
             block_Gravity(&t);
 
         if(count % 350 == 0){
-            hittest_block(&t);
-            check_line(&t);
+            if(hittest_block(&t) == 1)
+                new_Block(&t);
         }
 
         if(timer % 50 == 0){
             tetris_Print(&t);
-            printf("%d, %d \n", count, timer);
-            printf("X: %2d, Y: %2d \n", t.posX, t.posY);
+            printf("[SCORE: %d] \n", t.score);
         }
-
     }
 
     free(t.board);
-    printf("\n끝");
+    tetris_cleanup_io();
+    puts("GAME OVER!!");
     return 0;
 }

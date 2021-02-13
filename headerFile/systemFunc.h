@@ -3,4 +3,6 @@
 
 void set_ioconfig();
 
+void tetris_cleanup_io();
+
 #endif
