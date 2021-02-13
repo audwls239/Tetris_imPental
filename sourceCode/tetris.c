@@ -58,6 +58,7 @@ void new_Block(tetris* t){
     t -> posY = 0;
 
     if(hittest_block(t) == 1){
+        tetris_Print(t);
         t -> gameover = 1;
     }
 }
@@ -109,12 +110,23 @@ void rotate_Block(tetris* t){
         }
     }
 
+    for(i = 0; i < t -> current.height; i++){
+        for(j = 0; j < t -> current.width; j++){
+            if(temp.shape[i][j] == 1 && t -> board[t -> posY][t -> posX] == 1)
+                return;
+        }
+    }
+
     t -> current = temp;
+    // 회전후 블럭이 화면 밖으로 나가는걸 방지
+    if(t -> posX > t -> width - t -> current.width)
+        t -> posX--;
 }
 
 /* 떨어지는 블럭 아래에 블럭 있을시 게임판에 새기고 새로 생성 */
 int hittest_block(tetris* t){
     int i, j;
+
     // 바닥에 닿았을 때
     if(t -> posY == t -> height - t -> current.height){
         carveblock(t);
@@ -130,6 +142,8 @@ int hittest_block(tetris* t){
             }
         }
     }
+
+    return 0;
 }
 
 /* 게임판에 블럭 새기기 */
@@ -144,13 +158,6 @@ void carveblock(tetris* t){
     }
 
     check_line(t);
-}
-
-/* 블럭 내려 온다 블럭 내려온다~ */
-void block_Gravity(tetris* t){
-    t -> posY++;
-    if(move_block(t, 2))
-        t -> posY--;
 }
 
 /* 블럭의 게임판 충돌 판정(0 = 왼쪽으로, 1 = 오른쪽으로, 2 = 아래로) */
@@ -188,6 +195,7 @@ int move_block(tetris* t, int direction){
             // 아래에 바닥이 있을 경우 이동 불가능
             if(t -> posY > t -> height - t -> current.height)
                 return 1;
+
             // 아래에 블럭이 있을 경우 이동 불가능
             for(i = t -> current.height - 1; i > -1; i--){
                 for(j = 0; j < t -> current.width; j++){
@@ -203,7 +211,6 @@ int move_block(tetris* t, int direction){
 /* 짬통 다 찼나? */
 void check_line(tetris* t){
     int i, j;
-    int line;
     int state;
     
     for(i = t -> height - 1; i > 0; i--){
@@ -219,7 +226,7 @@ void check_line(tetris* t){
             }
         }
 
-        // 한 줄 완성시 삭제
+        // 한 줄 완성시 삭제 + 점수 상승
         if(state){
             t -> score += 100;
             remove_line(t, i);
@@ -231,9 +238,12 @@ void check_line(tetris* t){
 void remove_line(tetris* t, int line){
     int i;
 
+    // 위에 줄 한칸 아래로 내리기
     for(i = line; i > 0; i--){
         t -> board[i] = t -> board[i - 1];
     }
+
+    // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)
         t -> board[0][i] = 0;
 }
