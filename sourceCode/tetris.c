@@ -17,6 +17,8 @@ void setting_Tetris(tetris* t, int width, int height){
     t -> height = height;
     t -> gameover = 0;
     t -> score = 0;
+    t -> posX = 0;
+    t -> posY = 0;
 
     t -> board = (int**) malloc(sizeof(int*) * t -> height);
 
@@ -63,8 +65,9 @@ void tetris_Print(tetris* t){
 /* 아래 충돌시 블럭 게임판에 박제하고 새로 생성 */
 int hittest_block(tetris* t){
     int i, j;
+    int count = 0;
 
-    // 바닥에 닿았을 때
+    // 바닥에 닿았을때
     if(t -> posY == t -> height - t -> current.height){
         carveblock(t);
         return 1;

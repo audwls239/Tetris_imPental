@@ -147,8 +147,10 @@ void fall_block(tetris* t){
     while(1){
         t -> posY++;
         if(move_block(t, 2))
-                t -> posY--;
-        if(hittest_block(t) == 1)
+            t -> posY--;
+        if(hittest_block(t) == 1){
+            new_Block(t);
             break;
+        }
     }
 }

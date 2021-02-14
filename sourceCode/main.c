@@ -89,8 +89,10 @@ int main(void){
         }
 
         if(count % 350 == 0){
-            if(hittest_block(&t) == 1)
+            if(hittest_block(&t) == 1){
                 new_Block(&t);
+                count = 1;
+            }
         }
 
         if(timer % 50 == 0){
