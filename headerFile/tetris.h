@@ -25,4 +25,6 @@ void check_line(tetris* t);
 
 void remove_line(tetris* t, int line);
 
+void fall_block(tetris* t);
+
 #endif

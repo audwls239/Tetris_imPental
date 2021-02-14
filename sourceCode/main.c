@@ -33,12 +33,11 @@ int main(void){
     puts("↓  = DOWN");
     puts("←  = RIGHT");
     puts("→  = LEFT");
-    puts("Rotate = Space");
+    puts("Rotate = SPACE");
+    puts("Drop = W");
     puts("");
-    puts("Press to Enter for start!!");
-    while(1){    
-        if(getchar() == 10) break;
-    }
+    puts("Press ENTER Key for start!!");
+    while(10 != getchar());
 
     int i = 0;
     int timer = 0;
@@ -83,30 +82,25 @@ int main(void){
                 rotate_Block(&t);
                 count = 1;
             }
-            else if(cmd == 101)
-                debug_new_Block(&t);
             else if(cmd == 119)
-                if(hittest_block(&t) == 1)
-                    new_Block(&t);
+                fall_block(&t);
         }
 
         // timer가 350이 될때마다 블럭이 한칸씩 내려감
+        if(timer % 350 == 0){
+            t.posY++;
+            if(move_block(&t, 2))
+                t.posY--;
+        }
 
-        // if(timer % 350 == 0){
-        //     t.posY++;
-        //     if(move_block(&t, 2))
-        //         t.posY--;
-        // }
-
-        // if(count % 350 == 0){
-            // if(hittest_block(&t) == 1)
-            //     new_Block(&t);
-        // }
+        if(count % 350 == 0){
+            if(hittest_block(&t) == 1)
+                new_Block(&t);
+        }
 
         if(timer % 50 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
-            printf("X: %2d, Y: %2d \n", t.posX, t.posY);
         }
     }
 

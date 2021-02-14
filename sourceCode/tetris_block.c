@@ -47,7 +47,7 @@ void new_Block(tetris* t){
     }
 }
 
-/* 블럭 90도 회전 */
+/* 블럭 시계방향 90도 회전 */
 void rotate_Block(tetris* t){
     struct tetris_block temp = {};
     int i, j;
@@ -63,15 +63,32 @@ void rotate_Block(tetris* t){
         }
     }
 
+    // 충돌 확인용 임시 좌표
+    int tempX = t -> posX;
+    int tempY = t -> posY;
+
+    // 자연스러운 회전을 위해 좌표 변경
+    t -> posX -= (temp.width - t -> current.width) / 2;
+    t -> posY -= (temp.height - t -> current.height) / 2;
+
+    // 바닥에서 회전시 좌표 조정
+    if(t -> posY + temp.height > t -> height){
+        t -> posY = t -> height - temp.height;
+    }
+
+    if(t -> posY < 0)
+        t -> posY++;
+    
     // 회전할 위치에 블럭이 있을시 회전 무효
     for(i = 0; i < temp.height; i++){
         for(j = 0; j < temp.width; j++){
-            if(temp.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posY + j] == 1)
+            if(temp.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
                 return;
         }
     }
 
     t -> current = temp;
+
     // 회전후 블럭이 화면 밖으로 나가는걸 방지
     if(t -> posX > t -> width - t -> current.width)
         t -> posX--;
@@ -125,12 +142,11 @@ int move_block(tetris* t, int direction){
     return 0;
 }
 
-/* 오빠 테스트용 블럭 뽑았다 */
-void debug_new_Block(tetris* t){
-    static int i = 0;
-
-    t -> current = block_Shape[i++ % 7];
-    
-    t -> posX = (t -> width / 2) - (t -> current.width / 2);
-    t -> posY = 0;
+/* 바로 내리기 */
+void fall_block(tetris* t){
+    while(1){
+        t -> posY++;
+        if(hittest_block(t) == 1)
+            break;
+    }
 }
