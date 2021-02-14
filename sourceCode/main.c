@@ -6,6 +6,7 @@
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
+#include "../headerFile/tetris_block.h"
 
 int main(void){
     int cmd;
@@ -53,6 +54,11 @@ int main(void){
                 if(getchar() == 91){
                     cmd = getchar();
                     switch(cmd){
+                        case UP:
+                            t.posY--;
+                            if(t.posY < 0)
+                                t.posY++;
+                            break;
                         case DOWN:
                             t.posY++;
                             if(move_block(&t, 2))
@@ -77,24 +83,25 @@ int main(void){
                 rotate_Block(&t);
                 count = 1;
             }
+            else if(cmd == 101)
+                debug_new_Block(&t);
             else if(cmd == 119)
                 if(hittest_block(&t) == 1)
                     new_Block(&t);
-            else if(cmd == 101)
-                debug_new_Block(&t);
         }
 
         // timer가 350이 될때마다 블럭이 한칸씩 내려감
-        if(timer % 350 == 0){
-            t.posY++;
-            if(move_block(&t, 2))
-                t.posY--;
-        }
 
-        if(count % 350 == 0){
-            if(hittest_block(&t) == 1)
-                new_Block(&t);
-        }
+        // if(timer % 350 == 0){
+        //     t.posY++;
+        //     if(move_block(&t, 2))
+        //         t.posY--;
+        // }
+
+        // if(count % 350 == 0){
+            // if(hittest_block(&t) == 1)
+            //     new_Block(&t);
+        // }
 
         if(timer % 50 == 0){
             tetris_Print(&t);

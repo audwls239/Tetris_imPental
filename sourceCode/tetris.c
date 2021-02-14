@@ -2,34 +2,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
+#include "../headerFile/systemFunc.h"
+#include "../headerFile/tetris_block.h"
 
-struct tetris_block block_Shape[] = {
-    {{1, 1, 1, 1}, 4, 1},
 
-    {{  {1, 1},
-        {1, 1}}, 2, 2},
-
-    {{  {1, 1, 0},
-        {0, 1, 1}}, 3, 2},
-
-    {{  {0, 1, 1},
-        {1, 1, 0}}, 3, 2},
-
-    {{  {0, 1},
-        {0, 1},
-        {1, 1}}, 2, 3},
-
-    {{  {1, 0},
-        {1, 0},
-        {1, 1}}, 2, 3},
-
-    {{  {1, 1, 1},
-        {0, 1, 0}}, 3, 2}
-};
-
-/* 판 깔아봐라 */
+/* 게임 설정 초기화 */
 void setting_Tetris(tetris* t, int width, int height){
     int i, j;
 
@@ -45,21 +25,6 @@ void setting_Tetris(tetris* t, int width, int height){
 
         for(j = 0; j < t -> width; j++)
                 t -> board[i][j] = 0;
-    }
-}
-
-/* 오빠 새 블럭 뽑았다 */
-void new_Block(tetris* t){
-    srand(time(NULL));
-
-    t -> current = block_Shape[rand() % 7];
-    
-    t -> posX = (t -> width / 2) - (t -> current.width / 2);
-    t -> posY = 0;
-
-    if(hittest_block(t) == 1){
-        tetris_Print(t);
-        t -> gameover = 1;
     }
 }
 
@@ -95,35 +60,7 @@ void tetris_Print(tetris* t){
     printf("\n");
 }
 
-/* 90도 회전 하겠습니다(미완성) */
-void rotate_Block(tetris* t){
-    struct tetris_block temp = {};
-    int i, j;
-
-    temp.height = t -> current.width;
-    temp.width = t -> current.height;
-
-    for(i = 0; i < t -> current.height; i++){
-        for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1)
-                temp.shape[j][(t -> current.height - 1) - i] = 1;
-        }
-    }
-
-    for(i = 0; i < t -> current.height; i++){
-        for(j = 0; j < t -> current.width; j++){
-            if(temp.shape[i][j] == 1 && t -> board[t -> posY][t -> posX] == 1)
-                return;
-        }
-    }
-
-    t -> current = temp;
-    // 회전후 블럭이 화면 밖으로 나가는걸 방지
-    if(t -> posX > t -> width - t -> current.width)
-        t -> posX--;
-}
-
-/* 떨어지는 블럭 아래에 블럭 있을시 게임판에 새기고 새로 생성 */
+/* 아래 충돌시 블럭 게임판에 박제하고 새로 생성 */
 int hittest_block(tetris* t){
     int i, j;
 
@@ -146,7 +83,7 @@ int hittest_block(tetris* t){
     return 0;
 }
 
-/* 게임판에 블럭 새기기 */
+/* 게임판에 블럭 박제하기 */
 void carveblock(tetris* t){
     int i, j;
 
@@ -160,55 +97,7 @@ void carveblock(tetris* t){
     check_line(t);
 }
 
-/* 블럭의 게임판 충돌 판정(0 = 왼쪽으로, 1 = 오른쪽으로, 2 = 아래로) */
-int move_block(tetris* t, int direction){
-    int i, j;
-
-    switch(direction){
-        case 0:
-            // 왼쪽에 벽이 있을 경우 이동 불가능
-            if(t -> posX < 0)
-                return 1;
-
-            // 왼쪽에 블럭이 있을 경우 이동 불가능
-            for(i = 0; i < t -> current.width; i++){
-                for(j = 0; j < t -> current.height; j++){
-                    if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
-                        return 1;
-                }
-            }
-            break;
-        case 1:
-            // 오른쪽에 벽이 있을 경우 이동 불가능
-            if(t -> posX > t -> width - t -> current.width)
-                    return 1;
-
-            // 오른쪽에 블럭이 있을 경우 이동 불가능
-            for(i = t -> current.width - 1; i > -1; i--){
-                for(j = 0; j < t -> current.height; j++){
-                    if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
-                        return 1;
-                }
-            }
-            break;
-        case 2:
-            // 아래에 바닥이 있을 경우 이동 불가능
-            if(t -> posY > t -> height - t -> current.height)
-                return 1;
-
-            // 아래에 블럭이 있을 경우 이동 불가능
-            for(i = t -> current.height - 1; i > -1; i--){
-                for(j = 0; j < t -> current.width; j++){
-                    if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
-                        return 1;
-                }
-            }
-    }
-
-    return 0;
-}
-
-/* 짬통 다 찼나? */
+/* 완성된 라인이 있는지 체크 */
 void check_line(tetris* t){
     int i, j;
     int state;
@@ -234,7 +123,7 @@ void check_line(tetris* t){
     }
 }
 
-/* 야야 짬통 찼다 비워라 */
+/* 해당 라인 삭제 */
 void remove_line(tetris* t, int line){
     int i;
 
@@ -246,14 +135,4 @@ void remove_line(tetris* t, int line){
     // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)
         t -> board[0][i] = 0;
-}
-
-/* 오빠 테스트용 블럭 뽑았다 */
-void debug_new_Block(tetris* t){
-    static int i = 0;
-
-    t -> current = block_Shape[i++ % 7];
-    
-    t -> posX = (t -> width / 2) - (t -> current.width / 2);
-    t -> posY = 0;
 }
