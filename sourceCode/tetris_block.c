@@ -146,6 +146,8 @@ int move_block(tetris* t, int direction){
 void fall_block(tetris* t){
     while(1){
         t -> posY++;
+        if(move_block(t, 2))
+                t -> posY--;
         if(hittest_block(t) == 1)
             break;
     }

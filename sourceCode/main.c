@@ -53,11 +53,6 @@ int main(void){
                 if(getchar() == 91){
                     cmd = getchar();
                     switch(cmd){
-                        case UP:
-                            t.posY--;
-                            if(t.posY < 0)
-                                t.posY++;
-                            break;
                         case DOWN:
                             t.posY++;
                             if(move_block(&t, 2))
