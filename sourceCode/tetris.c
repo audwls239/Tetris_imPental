@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
@@ -34,7 +33,10 @@ void setting_Tetris(tetris* t, int width, int height){
 void tetris_Print(tetris* t){
     int i, j;
 
-    system("clear");
+    // system("clear");
+
+    for(i = 0; i < 15; i++)
+        printf("\n");
 
     for(i = 0; i < t -> width + 2; i++)
         printf("0");
@@ -105,17 +107,15 @@ void check_line(tetris* t){
     int i, j;
     int state;
     
-    for(i = t -> height - 1; i > 0; i--){
+    for(i = 0; i < t -> height; i++){
+        state = 1;
+
+        // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
         for(j = 0; j < t -> width; j++){
-            if(t -> board[i][j] == 1){
+            if(state && t -> board[i][j])
                 state = 1;
-                continue;
-            }
-            // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
-            else{
+            else
                 state = 0;
-                break;
-            }
         }
 
         // 한 줄 완성시 삭제 + 점수 상승

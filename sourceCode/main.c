@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
@@ -48,6 +47,7 @@ int main(void){
         timer++;
         count++;
 
+        // 키 입력 받는 구간
         while((cmd = getchar()) > 0){
             if(cmd == 27){
                 if(getchar() == 91){
@@ -55,39 +55,41 @@ int main(void){
                     switch(cmd){
                         case DOWN:
                             t.posY++;
-                            if(move_block(&t, 2))
+                            if(move_block(&t))
                                 t.posY--;
                             break;
                         case LEFT:
                             t.posX++;
-                            if(move_block(&t, 1))
+                            if(move_block(&t))
                                 t.posX--;
                             count = 1;
                             break;
                         case RIGHT:
                             t.posX--;
-                            if(move_block(&t, 0))
+                            if(move_block(&t))
                                 t.posX++;
                             count = 1;
                             break;
                     }
                 }
             }
-            else if(cmd == 32){
+            else if(cmd == SPACE){
                 rotate_Block(&t);
                 count = 1;
             }
-            else if(cmd == 119)
+            else if(cmd == W)
                 fall_block(&t);
         }
 
-        // timer가 350이 될때마다 블럭이 한칸씩 내려감
-        if(timer % 350 == 0){
-            t.posY++;
-            if(move_block(&t, 2))
-                t.posY--;
-        }
+        // timer가 350이 되면 블럭이 한칸 내려감
 
+        // if(timer % 350 == 0){
+        //     t.posY++;
+        //     if(move_block(&t))
+        //         t.posY--;
+        // }
+
+        // count가 350이 되면 아래 블럭과 충돌 분석
         if(count % 350 == 0){
             if(hittest_block(&t) == 1){
                 new_Block(&t);
@@ -95,9 +97,10 @@ int main(void){
             }
         }
 
-        if(timer % 50 == 0){
+        if(timer % 100 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
+            printf("X: %2d Y:%2d \n", t.posX, t.posY);
         }
     }
 

@@ -3,12 +3,15 @@
 
 #include "struct.h"
 
+/* 완성 */
 void new_Block(tetris* t);
 
 void rotate_Block(tetris* t);
 
-int move_block(tetris* t, int direction);
+/* 완성 */
+int move_block(tetris* t);
 
-void debug_new_Block(tetris* t);
+/* 완성 */
+void fall_block(tetris* t);
 
 #endif

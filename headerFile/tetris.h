@@ -3,6 +3,7 @@
 
 #include "struct.h"
 
+#define W 119
 #define SPACE 32
 #define UP 65
 #define DOWN 66
