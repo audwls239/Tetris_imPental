@@ -31,9 +31,23 @@ struct tetris_block block_Shape[] = {
         {0, 1, 0}}, 3, 2}
 };
 
+/* 시작할때 쓸 블럭 생성 */
+void first_new_Block(tetris* t){
+    srand(time(NULL));
+
+    t -> current = block_Shape[rand() % 7];
+
+    t -> posX = (t -> width / 2) - (t -> current.width / 2);
+    t -> posY = 0;
+
+    t -> next = block_Shape[(rand() + 1) % 7];
+}
+
 /* 새 블럭 생성 */
 void new_Block(tetris* t){
     srand(time(NULL));
+
+    t -> current = t -> next;
 
     t -> next = block_Shape[rand() % 7];
     
@@ -45,7 +59,6 @@ void new_Block(tetris* t){
         t -> gameover = 1;
     }
 
-    t -> current = t -> next;
 }
 
 /* 블럭 시계방향 90도 회전 */

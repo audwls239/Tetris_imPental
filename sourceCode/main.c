@@ -23,7 +23,7 @@ int main(void){
 
     // 게임판 생성 & 블럭 생성
     setting_Tetris(&t, width, height);
-    new_Block(&t);
+    first_new_Block(&t);
 
     system("clear");
     puts("■ ■ ■ ■ ■ ■");
