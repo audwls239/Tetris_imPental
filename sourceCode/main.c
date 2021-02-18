@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
@@ -55,18 +54,18 @@ int main(void){
                     switch(cmd){
                         case DOWN:
                             t.posY++;
-                            if(move_block(&t, 2))
+                            if(move_block(&t))
                                 t.posY--;
                             break;
                         case LEFT:
                             t.posX++;
-                            if(move_block(&t, 1))
+                            if(move_block(&t))
                                 t.posX--;
                             count = 1;
                             break;
                         case RIGHT:
                             t.posX--;
-                            if(move_block(&t, 0))
+                            if(move_block(&t))
                                 t.posX++;
                             count = 1;
                             break;
@@ -84,7 +83,7 @@ int main(void){
         // timer가 350이 될때마다 블럭이 한칸씩 내려감
         if(timer % 350 == 0){
             t.posY++;
-            if(move_block(&t, 2))
+            if(move_block(&t))
                 t.posY--;
         }
 

@@ -7,8 +7,6 @@ void new_Block(tetris* t);
 
 void rotate_Block(tetris* t);
 
-int move_block(tetris* t, int direction);
-
-void debug_new_Block(tetris* t);
+int move_block(tetris* t);
 
 #endif

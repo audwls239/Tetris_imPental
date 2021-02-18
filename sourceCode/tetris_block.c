@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
@@ -94,49 +93,44 @@ void rotate_Block(tetris* t){
         t -> posX--;
 }
 
-/* 블럭의 게임판 충돌 판정(0 = 왼쪽으로, 1 = 오른쪽으로, 2 = 아래로) */
-int move_block(tetris* t, int direction){
+/* 블럭의 게임판 충돌 판정 */
+int move_block(tetris* t){
     int i, j;
 
-    switch(direction){
-        case 0:
-            // 왼쪽에 벽이 있을 경우 이동 불가능
-            if(t -> posX < 0)
+    // 왼쪽에 벽이 있을 경우 이동 불가능
+    if(t -> posX < 0)
+        return 1;
+
+    // 오른쪽에 벽이 있을 경우 이동 불가능
+    if(t -> posX > t -> width - t -> current.width)
+            return 1;
+
+    // 아래에 바닥이 있을 경우 이동 불가능
+    if(t -> posY > t -> height - t -> current.height)
+        return 1;
+
+    // 왼쪽에 블럭이 있을 경우 이동 불가능
+    for(i = 0; i < t -> current.width; i++){
+        for(j = 0; j < t -> current.height; j++){
+            if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
                 return 1;
+        }
+    }
 
-            // 왼쪽에 블럭이 있을 경우 이동 불가능
-            for(i = 0; i < t -> current.width; i++){
-                for(j = 0; j < t -> current.height; j++){
-                    if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
-                        return 1;
-                }
-            }
-            break;
-        case 1:
-            // 오른쪽에 벽이 있을 경우 이동 불가능
-            if(t -> posX > t -> width - t -> current.width)
-                    return 1;
-
-            // 오른쪽에 블럭이 있을 경우 이동 불가능
-            for(i = t -> current.width - 1; i > -1; i--){
-                for(j = 0; j < t -> current.height; j++){
-                    if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
-                        return 1;
-                }
-            }
-            break;
-        case 2:
-            // 아래에 바닥이 있을 경우 이동 불가능
-            if(t -> posY > t -> height - t -> current.height)
+    // 오른쪽에 블럭이 있을 경우 이동 불가능
+    for(i = t -> current.width - 1; i > -1; i--){
+        for(j = 0; j < t -> current.height; j++){
+            if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
                 return 1;
+        }
+    }
 
-            // 아래에 블럭이 있을 경우 이동 불가능
-            for(i = t -> current.height - 1; i > -1; i--){
-                for(j = 0; j < t -> current.width; j++){
-                    if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
-                        return 1;
-                }
-            }
+    // 아래에 블럭이 있을 경우 이동 불가능
+    for(i = t -> current.height - 1; i > -1; i--){
+        for(j = 0; j < t -> current.width; j++){
+            if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
+                return 1;
+        }
     }
 
     return 0;
@@ -146,7 +140,7 @@ int move_block(tetris* t, int direction){
 void fall_block(tetris* t){
     while(1){
         t -> posY++;
-        if(move_block(t, 2))
+        if(move_block(t))
             t -> posY--;
         if(hittest_block(t) == 1){
             new_Block(t);

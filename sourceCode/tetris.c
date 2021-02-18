@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../headerFile/main.h"
 #include "../headerFile/struct.h"
 #include "../headerFile/tetris.h"
 #include "../headerFile/systemFunc.h"
