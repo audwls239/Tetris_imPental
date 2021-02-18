@@ -12,6 +12,7 @@ typedef struct tetris{
     int width;
     int height;
     struct tetris_block current;
+    struct tetris_block next;
     int posX;
     int posY;
     int gameover;

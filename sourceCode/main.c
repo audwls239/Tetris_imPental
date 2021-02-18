@@ -10,7 +10,7 @@
 int main(void){
     int cmd;
     int width = 12;
-    int height = 15;
+    int height = 18;
     struct tetris t;
     struct timespec tm;
 
@@ -26,14 +26,14 @@ int main(void){
     new_Block(&t);
 
     system("clear");
-    puts("##########");
-    puts("# Tetris #");
-    puts("##########");
-    puts("↓  = DOWN");
-    puts("←  = RIGHT");
-    puts("→  = LEFT");
+    puts("■ ■ ■ ■ ■ ■");
+    puts("■  Tetris ■ ");
+    puts("■ ■ ■ ■ ■ ■");
+    puts("DOWN   = ↓");
+    puts("RIGHT  = ←");
+    puts("LEFT   = →");
     puts("Rotate = SPACE");
-    puts("Drop = W");
+    puts("Drop   = W");
     puts("");
     puts("Press ENTER Key for start!!");
     while(10 != getchar());

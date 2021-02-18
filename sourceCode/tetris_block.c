@@ -35,7 +35,7 @@ struct tetris_block block_Shape[] = {
 void new_Block(tetris* t){
     srand(time(NULL));
 
-    t -> current = block_Shape[rand() % 7];
+    t -> next = block_Shape[rand() % 7];
     
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
@@ -44,6 +44,8 @@ void new_Block(tetris* t){
         tetris_Print(t);
         t -> gameover = 1;
     }
+
+    t -> current = t -> next;
 }
 
 /* 블럭 시계방향 90도 회전 */

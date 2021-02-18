@@ -35,29 +35,47 @@ void tetris_Print(tetris* t){
 
     system("clear");
 
-    for(i = 0; i < t -> width + 2; i++)
-        printf("0");
+    for(i = 0; i < t -> width + 7; i++)
+        printf("▧ ");
     printf("\n");
 
     for(i = 0; i < t -> height; i++){
-        printf("0");
+        printf("▧ ");
         for(j = 0; j < t -> width; j++){
             if(j >= t -> posX
             && j < t -> posX + t -> current.width
             && i >= t -> posY
             && i < t -> posY + t -> current.height
-            && t -> current.shape[i - t -> posY][j - t -> posX] == 1)
-                printf("#");
-            else if(t -> board[i][j] == 1)
-                printf("#");
+            && t -> current.shape[i - t -> posY][j - t -> posX])
+                printf("■ ");
+            else if(t -> board[i][j])
+                printf("■ ");
             else
-                printf(" ");
+                printf("  ");
+
         }
-        printf("0\n");
+        printf("▧ ");
+
+        // 다음 블럭 표시
+        if(i < 4){
+            for(j = 0; j < 4; j++){
+                if(t -> next.shape[i][j] == 1){
+                    printf("■ ");
+                }
+                else
+                    printf("  ");
+            }
+            printf("▧ ");
+        }
+        if(i == 4){
+            for(j = 0; j < 5; j++)
+                printf("▧ ");
+        }
+        printf("\n");
     }
 
     for(i = 0; i < t -> width + 2; i++)
-        printf("0");
+        printf("▧ ");
     printf("\n");
 }
 
