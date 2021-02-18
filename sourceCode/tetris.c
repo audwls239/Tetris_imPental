@@ -104,7 +104,7 @@ void check_line(tetris* t){
     int i, j;
     int state;
     
-    for(i = t -> height - 1; i > 0; i--){
+    for(i = 0; i < t -> height; i++){
         for(j = 0; j < t -> width; j++){
             if(t -> board[i][j] == 1){
                 state = 1;
