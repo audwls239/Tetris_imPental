@@ -19,9 +19,4 @@ typedef struct tetris{
     int score;
 } tetris;
 
-typedef struct log{
-    FILE* ch1;
-    struct tm* now;
-} Log;
-
 #endif

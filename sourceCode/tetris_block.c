@@ -50,8 +50,7 @@ void new_Block(tetris* t){
 
     t -> current = t -> next;
 
-    // t -> next = block_Shape[rand() % 7];
-    t -> current = block_Shape[0];
+    t -> next = block_Shape[rand() % 7];
     
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
@@ -117,7 +116,7 @@ int move_block(tetris* t){
 
     // 오른쪽에 벽이 있을 경우 이동 불가능
     if(t -> posX > t -> width - t -> current.width)
-            return 1;
+        return 1;
 
     // 아래에 바닥이 있을 경우 이동 불가능
     if(t -> posY > t -> height - t -> current.height)

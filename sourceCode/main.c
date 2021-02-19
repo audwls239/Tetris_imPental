@@ -7,16 +7,7 @@
 #include "../headerFile/systemFunc.h"
 #include "../headerFile/tetris_block.h"
 
-extern void logOut(tetris* t, Log* log);
-
 int main(void){
-    Log log;
-    log.ch1 = fopen("log.txt", "wt");
-
-    time_t now = time(NULL);
-    log.now = localtime(&now);
-    log.now -> tm_year += 1900;
-
     int cmd;
     int width = 12;
     int height = 18;
@@ -56,6 +47,7 @@ int main(void){
         timer++;
         count++;
 
+        // 키 입력 받는 구간
         while((cmd = getchar()) > 0){
             if(cmd == 27){
                 if(getchar() == 91){
@@ -81,11 +73,11 @@ int main(void){
                     }
                 }
             }
-            else if(cmd == 32){
+            else if(cmd == SPACE){
                 rotate_Block(&t);
                 count = 1;
             }
-            else if(cmd == 119)
+            else if(cmd == W)
                 fall_block(&t);
         }
 
@@ -96,6 +88,7 @@ int main(void){
                 t.posY--;
         }
 
+        // count가 350이 되면 아래 블럭과 충돌 분석
         if(count % 350 == 0){
             if(hittest_block(&t) == 1){
                 new_Block(&t);
@@ -103,21 +96,14 @@ int main(void){
             }
         }
 
-        if(timer % 50 == 0){
+        if(timer % 100 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
-            logOut(&t, &log);
-        }
-
-        for(i = 0; i < 4; i++){
-            t.board[17][i] = 1;
-            t.board[17][8 + i] = 1;
         }
     }
 
     free(t.board);
     tetris_cleanup_io();
-    fclose(log.ch1);
     puts("GAME OVER!!");
     return 0;
 }
