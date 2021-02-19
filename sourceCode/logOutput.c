@@ -59,7 +59,7 @@ void logOut(tetris* t, Log* log){
     for(i = 0; i < t -> width + 2; i++)
         fprintf(log -> ch1, "▧");
     fprintf(log -> ch1, "\n");
-    fprintf(log -> ch1, "[SCORE: %d] \n", t -> score);
+    fprintf(log -> ch1, "[SCORE: %d] \n\n", t -> score);
     
     return;
 }

@@ -35,7 +35,8 @@ struct tetris_block block_Shape[] = {
 void first_new_Block(tetris* t){
     srand(time(NULL));
 
-    t -> current = block_Shape[rand() % 7];
+    // t -> current = block_Shape[rand() % 7];
+    t -> current = block_Shape[0];
 
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
@@ -49,7 +50,8 @@ void new_Block(tetris* t){
 
     t -> current = t -> next;
 
-    t -> next = block_Shape[rand() % 7];
+    // t -> next = block_Shape[rand() % 7];
+    t -> current = block_Shape[0];
     
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
@@ -77,10 +79,6 @@ void rotate_Block(tetris* t){
         }
     }
 
-    // 충돌 확인용 임시 좌표
-    int tempX = t -> posX;
-    int tempY = t -> posY;
-
     // 자연스러운 회전을 위해 좌표 변경
     t -> posX -= (temp.width - t -> current.width) / 2;
     t -> posY -= (temp.height - t -> current.height) / 2;
@@ -90,6 +88,7 @@ void rotate_Block(tetris* t){
         t -> posY = t -> height - temp.height;
     }
 
+    // 회전후 블럭이 바닥에 묻힐 경우 올려줌
     if(t -> posY < 0)
         t -> posY++;
     

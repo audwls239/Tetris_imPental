@@ -109,7 +109,7 @@ void carveblock(tetris* t){
 
     for(i = 0; i < t -> current.height; i++){
         for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1)
+            if(t -> current.shape[i][j])
                 t -> board[t -> posY + i][t -> posX + j] = 1;
         }
     }
@@ -124,11 +124,9 @@ void check_line(tetris* t){
     
     for(i = 0; i < t -> height; i++){
         for(j = 0; j < t -> width; j++){
-            if(t -> board[i][j] == 1){
-                state = 1;
-                continue;
-            }
             // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
+            if(t -> board[i][j])
+                state = 1;
             else{
                 state = 0;
                 break;
@@ -148,8 +146,8 @@ void remove_line(tetris* t, int line){
     int i;
 
     // 위에 줄 한칸 아래로 내리기
-    for(i = line; i > 0; i--){
-        t -> board[i] = t -> board[i - 1];
+    for(i = 0; i < line; i++){
+        t -> board[line - i] = t -> board[line - 1 - i];
     }
 
     // 맨 윗줄 0으로 초기화
