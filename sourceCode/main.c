@@ -7,16 +7,7 @@
 #include "../headerFile/systemFunc.h"
 #include "../headerFile/tetris_block.h"
 
-extern void logOut(tetris* t, Log* log);
-
 int main(void){
-    Log log;
-    log.ch1 = fopen("log.txt", "wt");
-
-    time_t now = time(NULL);
-    log.now = localtime(&now);
-    log.now -> tm_year += 1900;
-
     int cmd;
     int width = 12;
     int height = 18;
@@ -61,17 +52,20 @@ int main(void){
                 if(getchar() == 91){
                     cmd = getchar();
                     switch(cmd){
+                        // 하단 이동
                         case DOWN:
                             t.posY++;
                             if(move_block(&t))
                                 t.posY--;
                             break;
+                        // 좌측 이동
                         case LEFT:
                             t.posX++;
                             if(move_block(&t))
                                 t.posX--;
                             count = 1;
                             break;
+                        // 우측 이동
                         case RIGHT:
                             t.posX--;
                             if(move_block(&t))
@@ -81,21 +75,24 @@ int main(void){
                     }
                 }
             }
+            // 블럭 회전
             else if(cmd == 32){
                 rotate_Block(&t);
                 count = 1;
             }
+            // 즉시 낙하
             else if(cmd == 119)
                 fall_block(&t);
         }
 
-        // timer가 350이 될때마다 블럭이 한칸씩 내려감
+        // timer가 350이 되면 블럭이 한칸 내려감
         if(timer % 350 == 0){
             t.posY++;
             if(move_block(&t))
                 t.posY--;
         }
 
+        // count가 350이 되면 하단 충돌 판정 계산
         if(count % 350 == 0){
             if(hittest_block(&t) == 1){
                 new_Block(&t);
@@ -103,16 +100,15 @@ int main(void){
             }
         }
 
+        // timer가 50이 되면 화면 출력
         if(timer % 50 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
-            logOut(&t, &log);
         }
     }
 
     free(t.board);
     tetris_cleanup_io();
-    fclose(log.ch1);
     puts("GAME OVER!!");
     return 0;
 }

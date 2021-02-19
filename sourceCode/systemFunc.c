@@ -5,7 +5,7 @@
 struct termios save;
 
 void set_ioconfig(){
-    struct termios custom;      // termios 구조체 변수 custom 선언
+    struct termios custom;
     int fd = fileno(stdin);
     
     tcgetattr(fd, &save);

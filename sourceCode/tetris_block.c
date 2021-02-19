@@ -31,7 +31,7 @@ struct tetris_block block_Shape[] = {
         {0, 1, 0}}, 3, 2}
 };
 
-/* 시작할때 쓸 블럭 생성 */
+/* 첫 블럭 생성 & 다음 블럭 생성 */
 void first_new_Block(tetris* t){
     srand(time(NULL));
 
@@ -43,7 +43,7 @@ void first_new_Block(tetris* t){
     t -> next = block_Shape[(rand() + 1) % 7];
 }
 
-/* 새 블럭 생성 */
+/* 현재 블럭에 다음 블럭 가져오기 & 다음 블럭 생성 */
 void new_Block(tetris* t){
     srand(time(NULL));
 
@@ -51,10 +51,12 @@ void new_Block(tetris* t){
 
     t -> next = block_Shape[rand() % 7];
     
+    // 블럭 중앙 배치
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
 
-    if(hittest_block(t) == 1){
+    // 블럭 생성 후 충돌 판정시 게임오버
+    if(hittest_block(t)){
         tetris_Print(t);
         t -> gameover = 1;
     }
@@ -72,16 +74,12 @@ void rotate_Block(tetris* t){
     // temp에 90도 회전한 블럭 저장
     for(i = 0; i < t -> current.height; i++){
         for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1)
+            if(t -> current.shape[i][j])
                 temp.shape[j][(t -> current.height - 1) - i] = 1;
         }
     }
 
-    // 충돌 확인용 임시 좌표
-    int tempX = t -> posX;
-    int tempY = t -> posY;
-
-    // 자연스러운 회전을 위해 좌표 변경
+    // 자연스러운 회전을 위한 좌표 변경
     t -> posX -= (temp.width - t -> current.width) / 2;
     t -> posY -= (temp.height - t -> current.height) / 2;
 
@@ -90,13 +88,14 @@ void rotate_Block(tetris* t){
         t -> posY = t -> height - temp.height;
     }
 
+    // 회전 후 블럭이 바닥에 꽂힐때 좌표조정
     if(t -> posY < 0)
         t -> posY++;
     
     // 회전할 위치에 블럭이 있을시 회전 무효
     for(i = 0; i < temp.height; i++){
         for(j = 0; j < temp.width; j++){
-            if(temp.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
+            if(temp.shape[i][j] && t -> board[t -> posY + i][t -> posX + j])
                 return;
         }
     }
@@ -118,7 +117,7 @@ int move_block(tetris* t){
 
     // 오른쪽에 벽이 있을 경우 이동 불가능
     if(t -> posX > t -> width - t -> current.width)
-            return 1;
+        return 1;
 
     // 아래에 바닥이 있을 경우 이동 불가능
     if(t -> posY > t -> height - t -> current.height)
@@ -127,7 +126,7 @@ int move_block(tetris* t){
     // 왼쪽에 블럭이 있을 경우 이동 불가능
     for(i = 0; i < t -> current.width; i++){
         for(j = 0; j < t -> current.height; j++){
-            if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
+            if(t -> current.shape[j][i] && t -> board[t -> posY + j][t -> posX + i])
                 return 1;
         }
     }
@@ -135,7 +134,7 @@ int move_block(tetris* t){
     // 오른쪽에 블럭이 있을 경우 이동 불가능
     for(i = t -> current.width - 1; i > -1; i--){
         for(j = 0; j < t -> current.height; j++){
-            if(t -> current.shape[j][i] == 1 && t -> board[t -> posY + j][t -> posX + i] == 1)
+            if(t -> current.shape[j][i] && t -> board[t -> posY + j][t -> posX + i])
                 return 1;
         }
     }
@@ -143,7 +142,7 @@ int move_block(tetris* t){
     // 아래에 블럭이 있을 경우 이동 불가능
     for(i = t -> current.height - 1; i > -1; i--){
         for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + i][t -> posX + j] == 1)
+            if(t -> current.shape[i][j] && t -> board[t -> posY + i][t -> posX + j])
                 return 1;
         }
     }
@@ -151,13 +150,16 @@ int move_block(tetris* t){
     return 0;
 }
 
-/* 바로 내리기 */
+/* 즉시 낙하 */
 void fall_block(tetris* t){
     while(1){
+        // 내리기 반복
         t -> posY++;
         if(move_block(t))
             t -> posY--;
-        if(hittest_block(t) == 1){
+
+        // 하단 충돌시 종료
+        if(hittest_block(t)){
             new_Block(t);
             break;
         }

@@ -25,7 +25,7 @@ void setting_Tetris(tetris* t, int width, int height){
         t -> board[i] = (int*) malloc(sizeof(int) * t -> width);
 
         for(j = 0; j < t -> width; j++)
-                t -> board[i][j] = 0;
+            t -> board[i][j] = 0;
     }
 }
 
@@ -59,7 +59,7 @@ void tetris_Print(tetris* t){
         // 다음 블럭 표시
         if(i < 4){
             for(j = 0; j < 4; j++){
-                if(t -> next.shape[i][j] == 1){
+                if(t -> next.shape[i][j]){
                     printf("■ ");
                 }
                 else
@@ -79,7 +79,7 @@ void tetris_Print(tetris* t){
     printf("\n");
 }
 
-/* 아래 충돌시 블럭 게임판에 박제하고 새로 생성 */
+/* 하단 충돌 판정 & 충돌 판정시 블럭 박제 */
 int hittest_block(tetris* t){
     int i, j;
     int count = 0;
@@ -93,7 +93,7 @@ int hittest_block(tetris* t){
     // 아래에 블록 있을때
     for(i = t -> current.height - 1; i > -1; i--){
         for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1 && t -> board[t -> posY + 1 + i][t -> posX + j] == 1){
+            if(t -> current.shape[i][j] && t -> board[t -> posY + 1 + i][t -> posX + j]){
                 carveblock(t);
                 return 1;
             }
@@ -109,7 +109,7 @@ void carveblock(tetris* t){
 
     for(i = 0; i < t -> current.height; i++){
         for(j = 0; j < t -> current.width; j++){
-            if(t -> current.shape[i][j] == 1)
+            if(t -> current.shape[i][j])
                 t -> board[t -> posY + i][t -> posX + j] = 1;
         }
     }
@@ -117,17 +117,15 @@ void carveblock(tetris* t){
     check_line(t);
 }
 
-/* 완성된 라인이 있는지 체크 */
+/* 완성된 라인 체크 */
 void check_line(tetris* t){
     int i, j;
     int state;
     
     for(i = 0; i < t -> height; i++){
         for(j = 0; j < t -> width; j++){
-            if(t -> board[i][j] == 1){
+            if(t -> board[i][j])
                 state = 1;
-                continue;
-            }
             // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
             else{
                 state = 0;

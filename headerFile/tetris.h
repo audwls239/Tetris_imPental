@@ -9,22 +9,21 @@
 #define LEFT 67
 #define RIGHT 68
 
-void create_Board(tetris* t);
+/* 완성 */
+void create_Board(tetris* t);   // 게임판 생성 & 초기화
 
-void tetris_Print(tetris* t);
+/* 완성 */
+void tetris_Print(tetris* t);   // 화면 출력
 
-void setting_Tetris(tetris* t, int width, int height);
+/* 완성 */
+void setting_Tetris(tetris* t, int width, int height);  // 게임 셋팅 초기화
 
-int hittest_block(tetris* t);
+int hittest_block(tetris* t);   // 블럭 하단 충돌 계산
 
-void carveblock(tetris* t);
+void carveblock(tetris* t);     // 하단 충돌시 블럭 박제
 
-void block_Gravity(tetris* t);
+void check_line(tetris* t);     // 완성된 라인 확인
 
-void check_line(tetris* t);
-
-void remove_line(tetris* t, int line);
-
-void fall_block(tetris* t);
+void remove_line(tetris* t, int line);  // 완성된 라인 삭제 & 위 라인 아래로 당기기
 
 #endif
