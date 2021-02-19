@@ -7,7 +7,16 @@
 #include "../headerFile/systemFunc.h"
 #include "../headerFile/tetris_block.h"
 
+extern void logOut(tetris* t, Log* log);
+
 int main(void){
+    Log log;
+    log.ch1 = fopen("log.txt", "wt");
+
+    time_t now = time(NULL);
+    log.now = localtime(&now);
+    log.now -> tm_year += 1900;
+
     int cmd;
     int width = 12;
     int height = 18;
@@ -97,11 +106,13 @@ int main(void){
         if(timer % 50 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
+            logOut(&t, &log);
         }
     }
 
     free(t.board);
     tetris_cleanup_io();
+    fclose(log.ch1);
     puts("GAME OVER!!");
     return 0;
 }
