@@ -50,7 +50,8 @@ void new_Block(tetris* t){
 
     t -> current = t -> next;
 
-    t -> next = block_Shape[rand() % 7];
+    // t -> next = block_Shape[rand() % 7];
+    t -> current = block_Shape[0];
     
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
