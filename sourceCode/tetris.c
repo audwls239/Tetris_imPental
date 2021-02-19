@@ -48,7 +48,7 @@ void tetris_Print(tetris* t){
             && i < t -> posY + t -> current.height
             && t -> current.shape[i - t -> posY][j - t -> posX])
                 printf("■ ");
-            else if(t -> board[i][j])
+            else if(t -> board[i][j] == 1)
                 printf("■ ");
             else
                 printf("  ");
@@ -59,9 +59,8 @@ void tetris_Print(tetris* t){
         // 다음 블럭 표시
         if(i < 4){
             for(j = 0; j < 4; j++){
-                if(t -> next.shape[i][j]){
+                if(t -> next.shape[i][j])
                     printf("■ ");
-                }
                 else
                     printf("  ");
             }
@@ -146,9 +145,8 @@ void remove_line(tetris* t, int line){
     int i;
 
     // 위에 줄 한칸 아래로 내리기
-    for(i = 0; i < line; i++){
+    for(i = 0; i < line; i++)
         t -> board[line - i] = t -> board[line - 1 - i];
-    }
 
     // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)

@@ -108,10 +108,11 @@ int main(void){
         }
 
         // 버그 찾기용
-        for(i = 0; i < 4; i++){
-            t.board[17][i] = 1;
-            t.board[17][8 + i] = 1;
-        }
+
+        // for(i = 0; i < 4; i++){
+        //     t.board[17][i] = 1;
+        //     t.board[17][8 + i] = 1;
+        // }
     }
 
     free(t.board);
