@@ -47,6 +47,7 @@ int main(void){
         timer++;
         count++;
 
+        // 키 입력 받는 구간
         while((cmd = getchar()) > 0){
             if(cmd == 27){
                 if(getchar() == 91){
@@ -100,10 +101,16 @@ int main(void){
             }
         }
 
-        // timer가 50이 되면 화면 출력
-        if(timer % 50 == 0){
+        // timer가 100이 되면 화면 출력
+        if(timer % 100 == 0){
             tetris_Print(&t);
             printf("[SCORE: %d] \n", t.score);
+        }
+
+        // 버그 찾기용
+        for(i = 0; i < 4; i++){
+            t.board[17][i] = 1;
+            t.board[17][8 + i] = 1;
         }
     }
 

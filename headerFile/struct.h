@@ -1,7 +1,7 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-// 블럭 정보
+/* 블럭 정보 */
 struct tetris_block{
     int shape[4][4];    // 블럭 모양
     int width;          // 블럭 넓이

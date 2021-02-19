@@ -35,7 +35,8 @@ struct tetris_block block_Shape[] = {
 void first_new_Block(tetris* t){
     srand(time(NULL));
 
-    t -> current = block_Shape[rand() % 7];
+    // t -> current = block_Shape[rand() % 7];
+    t -> current = block_Shape[0];
 
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
     t -> posY = 0;
@@ -49,7 +50,8 @@ void new_Block(tetris* t){
 
     t -> current = t -> next;
 
-    t -> next = block_Shape[rand() % 7];
+    // t -> next = block_Shape[rand() % 7];
+    t -> current = block_Shape[0];
     
     // 블럭 중앙 배치
     t -> posX = (t -> width / 2) - (t -> current.width / 2);
@@ -88,7 +90,7 @@ void rotate_Block(tetris* t){
         t -> posY = t -> height - temp.height;
     }
 
-    // 회전 후 블럭이 바닥에 꽂힐때 좌표조정
+    // 회전 후 블럭이 바닥에 묻힐때 좌표조정
     if(t -> posY < 0)
         t -> posY++;
     
