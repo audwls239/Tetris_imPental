@@ -142,11 +142,15 @@ void check_line(tetris* t){
 
 /* 해당 라인 삭제 */
 void remove_line(tetris* t, int line){
-    int i;
+    int i, j;
+    int* temp;
 
     // 위에 줄 한칸 아래로 내리기
+    temp = t -> board[line];
+
     for(i = 0; i < line; i++)
-        t -> board[line - i] = t -> board[line - 1 - i];
+        t -> board[line - i] = t -> board[line - 1 -i];
+    t -> board[0] = temp;
 
     // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)
