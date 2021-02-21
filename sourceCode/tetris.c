@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "../headerFile/struct.h"
@@ -122,11 +123,11 @@ void check_line(tetris* t){
     int state;
     
     for(i = 0; i < t -> height; i++){
+        state = 1;
+
+        // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
         for(j = 0; j < t -> width; j++){
-            // 현재 줄 체크중 중간에 빈 블럭 있을 경우 다음줄 체크
-            if(t -> board[i][j])
-                state = 1;
-            else{
+            if(t -> board[i][j] == 0){
                 state = 0;
                 break;
             }
@@ -143,15 +144,10 @@ void check_line(tetris* t){
 /* 해당 라인 삭제 */
 void remove_line(tetris* t, int line){
     int i, j;
-    int* temp;
 
-    // 완성된 라인 주소 복사
-    temp = t -> board[line];
-
-    // 완성된 라인으로 부터 윗 줄 주소 아랫 줄로 내리기
+    // 윗줄의 값을 아랫줄로 복사
     for(i = 0; i < line; i++)
-        t -> board[line - i] = t -> board[line - 1 -i];
-    t -> board[0] = temp;       // 완성된 라인 맨 위로 올리기
+        memcpy(t -> board[line - i], t -> board[line - 1 - i], t -> width * sizeof(int));
 
     // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)
