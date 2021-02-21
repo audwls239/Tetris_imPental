@@ -145,12 +145,13 @@ void remove_line(tetris* t, int line){
     int i, j;
     int* temp;
 
-    // 위에 줄 한칸 아래로 내리기
+    // 완성된 라인 주소 복사
     temp = t -> board[line];
 
+    // 완성된 라인으로 부터 윗 줄 주소 아랫 줄로 내리기
     for(i = 0; i < line; i++)
         t -> board[line - i] = t -> board[line - 1 -i];
-    t -> board[0] = temp;
+    t -> board[0] = temp;       // 완성된 라인 맨 위로 올리기
 
     // 맨 윗줄 0으로 초기화
     for(i = 0; i < t -> width; i++)

@@ -102,9 +102,9 @@ void rotate_Block(tetris* t){
 
     t -> current = temp;
 
-    // 회전후 블럭이 화면 밖으로 나가는걸 방지
+    // 우측벽에서 회전후 블럭이 화면 밖으로 나가는걸 방지
     if(t -> posX > t -> width - t -> current.width)
-        t -> posX--;
+        t -> posX = t -> width - t -> current.width;
 }
 
 /* 블럭의 게임판 충돌 판정 */
